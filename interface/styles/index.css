@@ -1,0 +1,42 @@
+body{
+	background:url("http://localhost/robot_dreams/wallet/interface/assets/background_2.webp");
+	color: white;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+#main {
+	border:3px solid black;
+	background:#212529!important;
+
+}
+
+#currency_container{
+	padding:20px;
+	text-align: left;
+}
+
+#main_currency{
+	font-size:30px;
+	font-weight: bold;
+	font-style: normal;
+}
+
+#wallet_container div{
+	
+	padding: 10px;
+	text-align: left;
+}
+
+#btn_container{
+	text-align:center !important;
+}
+
+.block{
+	border-bottom:1px solid white;
+}
+
+#send_button{
+	background-color:#6699ff;
+}
