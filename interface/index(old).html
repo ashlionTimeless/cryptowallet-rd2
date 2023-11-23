@@ -138,34 +138,113 @@
     
   </div>
 </footer>
-<script src="./scripts/Application.js"></script>
-<script src="./scripts/WalletUI.js"></script>
-<script src="./scripts/ListenerManager.js"></script>
-<script src="./scripts/Renderer.js"></script> <!-- added this script after lesson -->
-<script src="./scripts/BlockchainService.js"></script>
 
     <script>
-      /*
-                Application (in charge of everything)
-              /                          \
-             /                            \
-         WalletUI                         BlockchainService
-(in charge of rendering and listening)      (in charge of everything related to account)
-         /                      \
-        /                        \
-    Renderer                 ListenerManager
-(in charge of rendering)   (in charge of listening to events)
 
-      */
-      let app = new Application();
-      console.log(app);
-      let renderer = new Renderer(app);
-      let listenerManager = new ListenerManager(app);
-      let walletUi = new WalletUI(app,listenerManager,renderer);
-      app.walletUi = walletUi;
-      let blockchainService = new BlockchainService(app);
-      app.blockchainService = blockchainService;
-      app.prepareUI();
+      const DEFAULT_CURRENCY = "ETH";
+      let default_balance = 999.9;
+      let default_address = "0x03170A61fA4546CEA276337470AdB5E8f6b52432";
+      let current_currency=DEFAULT_CURRENCY;
+
+      // Application Methods
+      prepareUI();
+      function getCurrency(){
+        return current_currency;
+      }
+      function changeCurrency(currency){
+        setCurrency(currency);
+        renderUI();
+      }
+      function setCurrency(currency){
+        current_currency = currency;
+      }
+      // END OF APPLICATION METHODS
+
+
+      // Blockchain Service Methods
+      function getBalance(){
+        return default_balance;
+      }
+
+      function getAddress(){
+        return default_address;
+      }
+      //
+      function sendCurrency(){
+        let _address = document.getElementById("transfer_address").value;
+        console.log(_address);
+        let _amount=document.getElementById("transfer_amount").value;
+        let currency = getCurrency();
+        console.log(currency)
+        let result = "Sending "+_amount+" "+currency+" to "+_address;
+        alert(result);
+      }
+      // END OF BLOCKCHAIN SERVICE METHODS
+
+
+      // START OF WALLET UI METHODS
+      function prepareUI(){
+        console.log("walletUi prepareUi")
+        renderUI();
+        setListeners()
+      }
+      // END OF WALLET UI METHODS
+
+      // START OF RENDERER METHODS
+      function renderUI(){
+        console.log("renderer renderUi")
+        renderCurrency();
+        renderBalance();
+        renderAddress();
+      }
+      function renderCurrency(){
+        console.log("renderer renderCurrency")
+        let currency = getCurrency();
+        let elements = document.getElementsByClassName("currency_symbol");
+        //for loop
+        for(let i=0; i<elements.length;i++){
+          let element = elements[i];
+          element.innerHTML=currency;
+        }
+      }
+
+      function renderBalance(){
+        let balance = getBalance();
+        let element = document.getElementById("balance");
+        element.innerHTML=balance;
+      }
+
+      function renderAddress(){
+        let address = getAddress();
+        let element = document.getElementById("address");
+        element.innerHTML=address;
+      }
+      // END OF RENDERER METHODS
+
+      // START OF LISTENER MANAGER METHODS
+      function setListeners(){
+        setChangeCurrencyListener();
+        setSendCurrencyListener();
+      }
+
+      function setChangeCurrencyListener(){
+        let elements = document.getElementsByClassName("currency_container");
+        for(let i = 0;i<elements.length; i++){
+          let element = elements[i];
+          element.addEventListener("click",(event)=>{
+            let element = event.target.parentNode;
+            let currency = element.getAttribute("data-value");
+            changeCurrency(currency);
+          });
+        }
+      }
+
+      function setSendCurrencyListener(){
+        document.getElementById("send_button").addEventListener("click",(event)=>{
+          sendCurrency();
+        })
+      }
+      // END OF LISTENER MANAGER METHODS
 
     </script>
 
