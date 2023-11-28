@@ -26,5 +26,6 @@ class ListenerManager{
             this.app.sendCurrency();
         })
     }
-
 }
+
+module.exports = ListenerManager;

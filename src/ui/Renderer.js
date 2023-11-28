@@ -1,4 +1,5 @@
 // відповідає за рендер елементів в додатку
+
 class Renderer{
 
     constructor(app) {
@@ -22,14 +23,23 @@ class Renderer{
     }
 
     renderBalance(){
-        let balance = this.app.getBalance();
-        let element = document.getElementById("balance");
-        element.innerHTML=balance;
+        this.app.getBalance().then((balance)=>{
+            let element = document.getElementById("balance");
+            element.innerHTML=balance;
+        }).catch((e)=>{
+            console.error(e);
+        });
     }
 
     renderAddress(){
-        let address = this.app.getAddress();
-        let element = document.getElementById("address");
-        element.innerHTML=address;
+        this.app.getAddress().then((address)=>{
+            console.log("Renderer.renderAddress",address);
+            let element = document.getElementById("address");
+            element.innerHTML=address;
+        }).catch((e)=>{
+            console.error(e);
+        });
     }
 }
+
+module.exports = Renderer;

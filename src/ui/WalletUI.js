@@ -21,3 +21,5 @@ class WalletUI{
         return this.renderer;
     }
 }
+
+module.exports = WalletUI;
