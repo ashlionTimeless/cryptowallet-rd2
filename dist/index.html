@@ -39,39 +39,39 @@
 
         <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
           <li>
-            <a href="#" class="nav-link text-secondary">
+            <a href="#" class="nav-link text-secondary change-currency" data-value="ETH">
               <img src="../dist/assets/eth-logo.svg" width="20" height="20">
-              ETH
+              <p>ETH</p>
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link text-white">
+            <a href="#" class="nav-link text-white change-currency" data-value="ERC20">
               <img src="../dist/assets/eth-logo.svg" width="20" height="20">
-              ERC20
+              <p>ERC20</p>
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link text-white">
+            <a href="#" class="nav-link text-white change-currency" data-value="BTC">
               <img src="../dist/assets/btc.png" width="20" height="20">
-              BTC
+              <p>BTC</p>
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link text-white">
+            <a href="#" class="nav-link text-white change-currency" data-value="LTC">
               <img src="../dist/assets/ltc.webp" width="20" height="20">
-              LTC
+              <p>LTC</p>
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link text-white">
+            <a href="#" class="nav-link text-white change-currency" data-value="BNB">
               <img src="../dist/assets/bnb.png" width="20" height="20">
-              BNB
+              <p>BNB</p>
             </a>
           </li>
           <li>
-            <a href="#" class="nav-link text-white">
+            <a href="#" class="nav-link text-white change-currency" data-value="DOT">
               <img src="../dist/assets/dot.jpg" width="20" height="20">
-              DOT
+              <p>DOT</p>
             </a>
           </li>
         </ul>
@@ -98,15 +98,15 @@
     <div class="row py-lg-5">
       <div id="wallet_container" class="col-lg-6 col-md-8 mx-auto">
         <div id="currency_container" class="col-lg-12 block">
-          <i id="main_currency" class="currency">ETH</i>
+          <i id="main_currency" class="currency_symbol"></i>
         </div>
 
         <div id="balance_container" class="col-lg-12 block">
-          <p> <b>Balance:</b> <i id="balance">0</i> <i class="currency">ETH</i></p>
+          <p> <b>Balance:</b> <i id="balance">0</i> <i class="currency_symbol"></i></p>
         </div>
 
         <div id="address_container" class="col-lg-12 block">
-          <p> <b>Address:</b> <i id="address">0x03170A61fA4546CEA276337470AdB5E8f6b52432</i></p>
+          <p> <b>Address:</b> <i id="address"></i></p>
         </div>
 
         <div id="transfer_block" class="col-lg-12  block">
@@ -122,7 +122,7 @@
 
           </div>
           <div id="btn_container" class="col-lg-12 block">
-            <button id="send_button" class="btn btn-primary col-sm-12" onclick="transfer_currency()">SEND</button>
+            <button id="send_button" class="btn btn-primary col-sm-12">SEND</button>
           </div>
         </div>
       </div>

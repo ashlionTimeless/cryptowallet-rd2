@@ -40,3 +40,7 @@ body{
 #send_button{
 	background-color:#6699ff;
 }
+
+.change-currency p{
+	display: inline;
+}

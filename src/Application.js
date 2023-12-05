@@ -7,15 +7,13 @@ const BlockchainService = require('./blockchain/BlockchainService');
 class Application{
 
     constructor() {
-        console.log("Application is being constructed")
         this.currency = DEFAULT_CURRENCY;
         let renderer = new Renderer(this);
         let listenerManager = new ListenerManager(this);
         let walletUi = new WalletUI(this,listenerManager,renderer);
-        this.walletUi = walletUi;
+        this.setWalletUI(walletUi);
         let blockchainService = new BlockchainService(this);
         this.blockchainService = blockchainService;
-        console.log("Application is ready")
     }
 
     setWalletUI(walletUi){
@@ -27,7 +25,6 @@ class Application{
     }
 
     prepareUI(){
-        console.log("app prepareUI")
         this.walletUi.prepareUI();
     }
     getCurrency(){
@@ -36,7 +33,7 @@ class Application{
 
     changeCurrency(currency){
         this.setCurrency(currency);
-        this.getWalletUi().renderUI();
+        this.getWalletUi().prepareUI();
     }
 
     setCurrency(currency){
@@ -52,7 +49,6 @@ class Application{
         return new Promise(async(resolve,reject)=>{
             try{
                 let result = await this.blockchainService.getAddress();
-                console.log("Application.getAddress",result);
                 return resolve(result);
             }catch (e){
                 console.error(e);

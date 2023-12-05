@@ -6,13 +6,11 @@ class Renderer{
         this.app = app
     }
     renderUI(){
-        console.log("renderer renderUi")
         this.renderCurrency();
         this.renderBalance();
         this.renderAddress();
     }
     renderCurrency(){
-        console.log("renderer renderCurrency")
         let currency = this.app.getCurrency();
         let elements = document.getElementsByClassName("currency_symbol");
         //for loop
@@ -33,7 +31,6 @@ class Renderer{
 
     renderAddress(){
         this.app.getAddress().then((address)=>{
-            console.log("Renderer.renderAddress",address);
             let element = document.getElementById("address");
             element.innerHTML=address;
         }).catch((e)=>{

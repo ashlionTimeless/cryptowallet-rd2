@@ -1,9 +1,8 @@
 const PROVIDER_URL = process.env.ETH_PROVIDER_URL;
 const PRIVATE_KEY = process.env.ETH_PRIVATE_KEY;
-const DEFAULT_ADDRESS = "0xf614F5ad2d83ae355262d9334dDa9A2EA70AD88b";
-console.log("provider_url ",PROVIDER_URL);
+
 let GWEI = 10**9;
-let GAS_PRICE = 70*GWEI;
+let GAS_PRICE = 20*GWEI;
 
 let GAS_LIMIT = 21000;
 const Transaction = require('ethereumjs-tx');
@@ -16,7 +15,6 @@ const AbstractCurrencyLib = require('/src/blockchain/AbstractCurrencyLib');
 class EthLib extends AbstractCurrencyLib{
     constructor(app) {
         let provider = new Web3(new Web3.providers.HttpProvider(PROVIDER_URL));
-        console.log(provider);
         let validator = new Validator();
         let converter = new EthConverter();
         super(app,provider,validator,converter);
@@ -30,6 +28,9 @@ class EthLib extends AbstractCurrencyLib{
     getAddress(){
         return new Promise(async(resolve,reject)=>{
             try{
+
+                // let address = DEFAULT_ADDRESS;
+                // return resolve(address);
                 let privKey = await this.getPrivateKey()
                 let address = this.provider.eth.accounts.privateKeyToAccount(privKey)["address"];
 
@@ -88,7 +89,9 @@ class EthLib extends AbstractCurrencyLib{
                 console.log(privateKey);
                 let privKeyBuffer=Buffer.from(privateKey,'hex');
                 console.log(privKeyBuffer);
+
                 let from = await this.getAddress();
+
                 let nonce = await this.getNextNonce();
                 this.validator.validateAddress(from);
                 this.validator.validateNumber(nonce);

@@ -10,13 +10,17 @@ class ListenerManager{
     }
 
     setChangeCurrencyListener(){
-        let elements = document.getElementsByClassName("currency_container");
+        let elements = document.getElementsByClassName("change-currency");
         for(let i = 0;i<elements.length; i++){
             let element = elements[i];
             element.addEventListener("click",(event)=>{
-                let element = event.target.parentNode;
+                console.log("change currency event fired");
+                let element = event.currentTarget;
+                console.log("currentTarget");
                 let currency = element.getAttribute("data-value");
+                console.log(currency);
                 this.app.changeCurrency(currency);
+
             });
         }
     }

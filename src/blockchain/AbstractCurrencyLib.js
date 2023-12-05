@@ -39,11 +39,8 @@ class AbstractCurrencyLib{
     getCurrentBalance(){
         return new Promise(async(resolve,reject)=>{
             try{
-                console.log("Abstract getCurrentBalance start");
                 let address = await this.getAddress();
-                console.log("Abstract getCurrentBalance middle",address);
                 let balance =await this.getBalance(address);
-                console.log("Abstract getCurrentBalance end",balance);
                 return resolve(balance);
             }catch (e){
                 return reject(e);
