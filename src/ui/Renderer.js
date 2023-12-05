@@ -23,7 +23,7 @@ class Renderer{
     }
 
     renderBalance(){
-        this.app.getBalance().then((balance)=>{
+        this.app.getCurrentBalance().then((balance)=>{
             let element = document.getElementById("balance");
             element.innerHTML=balance;
         }).catch((e)=>{

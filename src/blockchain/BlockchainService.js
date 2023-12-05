@@ -5,6 +5,7 @@ class BlockchainService{
     constructor(app) {
         this.app = app
         let eth = new EthLib(app);
+
         this.currencyLibraries = {
             ETH:eth,
         }
@@ -13,11 +14,10 @@ class BlockchainService{
         let currentCurrency = this.app.getCurrency();
         return this.currencyLibraries[currentCurrency];
     }
-    getBalance(){
+    getCurrentBalance(){
         return new Promise(async(resolve,reject)=>{
             try{
-                let address = await this.getAddress();
-                let balance = await this.getCurrencyLibrary().getBalance(address);
+                let balance = await this.getCurrencyLibrary().getCurrentBalance();
                 return resolve(balance);
             }catch (e){
                 return reject(e);
@@ -37,16 +37,15 @@ class BlockchainService{
         })
     }
     //
-    sendCurrency(){
-        let _address = document.getElementById("transfer_address").value;
-        console.log(_address);
-        let _amount=document.getElementById("transfer_amount").value;
-        let currency = this.app.getCurrency();
-        console.log(currency)
-        let result = "Sending "+_amount+" "+currency+" to "+_address;
-        this.getCurrencyLibrary().sendCurrency(_address,_amount);
-        alert(result);
-
+    sendCurrency(receiver,amount){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                let result = await this.getCurrencyLibrary().sendCurrency(receiver,amount);
+                return resolve(result);
+            }catch (e){
+                return reject(e);
+            }
+        })
     }
 }
 

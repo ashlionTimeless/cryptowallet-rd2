@@ -22,8 +22,17 @@ class ListenerManager{
     }
 
     setSendCurrencyListener(){
-        document.getElementById("send_button").addEventListener("click",(event)=>{
-            this.app.sendCurrency();
+        document.getElementById("send_button").addEventListener("click",
+            async(event)=>{
+            let _address = document.getElementById("transfer_address").value;
+            let _amount=document.getElementById("transfer_amount").value;
+            try{
+                let result = await this.app.sendCurrency(_address,_amount);
+                alert(result);
+            }catch (e){
+                alert(e.message);
+            }
+
         })
     }
 }

@@ -1,23 +1,25 @@
-//let PROVIDER_URL = process.env.ETH_PROVIDER_URL;
-const PROVIDER_URL = "https://sepolia.infura.io/v3/d607a74fa6d047b494769f10b6d451d6";// TODO
+const PROVIDER_URL = process.env.ETH_PROVIDER_URL;
+const PRIVATE_KEY = process.env.ETH_PRIVATE_KEY;
 const DEFAULT_ADDRESS = "0xf614F5ad2d83ae355262d9334dDa9A2EA70AD88b";
+console.log("provider_url ",PROVIDER_URL);
 let GWEI = 10**9;
 let GAS_PRICE = 70*GWEI;
 
 let GAS_LIMIT = 21000;
-//const Transaction = require('ethereumjs-tx');
+const Transaction = require('ethereumjs-tx');
 
 const Web3 = require('web3');
 const EthConverter = require('/src/helpers/EthConverter');
 const Validator = require('/src/validators/blockchain/EthValidator');
 
-//const AbstractCurrencyLab = require('/src/core/blockchain/AbstractCurrencyLib')
-class EthLib{
+const AbstractCurrencyLib = require('/src/blockchain/AbstractCurrencyLib');
+class EthLib extends AbstractCurrencyLib{
     constructor(app) {
-        this.provider = new Web3(new Web3.providers.HttpProvider(PROVIDER_URL));
-        this.converter = new EthConverter();
-        this.validator = new Validator();
-        this.app = app;
+        let provider = new Web3(new Web3.providers.HttpProvider(PROVIDER_URL));
+        console.log(provider);
+        let validator = new Validator();
+        let converter = new EthConverter();
+        super(app,provider,validator,converter);
 
     }
 
@@ -28,7 +30,10 @@ class EthLib{
     getAddress(){
         return new Promise(async(resolve,reject)=>{
             try{
-                return resolve(DEFAULT_ADDRESS);
+                let privKey = await this.getPrivateKey()
+                let address = this.provider.eth.accounts.privateKeyToAccount(privKey)["address"];
+
+                return resolve(address);
             }catch (e){
                 return reject(e);
             }
@@ -39,8 +44,18 @@ class EthLib{
             try{
                 this.validator.validateAddress(address);
                 let balance =await this.provider.eth.getBalance(address);
-                balance = this.converter.toDecimals(balance);
+                balance = this.toDecimals(balance);
                 return resolve(balance);
+            }catch (e){
+                return reject(e);
+            }
+        })
+    }
+
+    getPrivateKey(){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                return resolve(PRIVATE_KEY);
             }catch (e){
                 return reject(e);
             }
@@ -50,15 +65,10 @@ class EthLib{
     sendCurrency(to,amount){
         return new Promise(async(resolve,reject)=>{
             try{
-                console.log("EthLib.sendCurrency ",to,amount);
-                this.validator.validateAddress(to,"Tx Receiver");
-                this.validator.validateNumber(amount,"sendCurrency amount");
-
-                alert("Transactions are disabled");
-                return reject();
                 this.validator.validateAddress(to,"Tx Receiver");
                 this.validator.validateNumber(amount,"sendCurrency amount");
                 let txData = await this._formatTransactionParams(to,amount);
+                console.log('tx params created',txData);
                 let hash = await this._makeTransaction(txData);
                 return resolve(hash);
             }catch (e){
@@ -67,17 +77,17 @@ class EthLib{
         });
     }
 
-    _formatTransactionParams(to,value,data=""){
+    _formatTransactionParams(to,value,data="0x"){
         return new Promise(async(resolve,reject)=>{
             try{
                 this.validator.validateAddress(to);
                 this.validator.validateNumber(value);
                 this.validator.validateString(data);
-
                 let privateKey = await this.getPrivateKey();
                 this.validator.validateString(privateKey);
-
+                console.log(privateKey);
                 let privKeyBuffer=Buffer.from(privateKey,'hex');
+                console.log(privKeyBuffer);
                 let from = await this.getAddress();
                 let nonce = await this.getNextNonce();
                 this.validator.validateAddress(from);
@@ -89,7 +99,7 @@ class EthLib{
                 let gasLimit = this.getGasLimit();
                 //this.validator.validateNumber(gasLimit);
 
-                value = this.fromDecimals(value);
+                value = this.converter.fromDecimals(value);
                 let chainId = this._getChainId();
                 //this.validator.validateNumber(chainId);
                 let txParams = {
@@ -132,11 +142,14 @@ class EthLib{
     _makeTransaction(txParams){
         return new Promise(async (resolve,reject)=>{
             try{
-                let tx = new Transaction(txParams);
+                console.log('making Transaction');
+                let tx = new Transaction(txParams,{'chain':'sepolia', 'chainId':'11155111'});
                 console.log(tx);
+                console.log('signing tx');
                 tx.sign(txParams.privateKey);
+                console.log('tx signed');
                 var raw = "0x"+tx.serialize().toString('hex');
-
+                console.log('tx serialized');
                 this.provider.eth.sendSignedTransaction(raw).on("receipt",(data)=>{
                     console.log(data);
                     let transactionHash = data["transactionHash"];
