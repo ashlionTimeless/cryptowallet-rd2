@@ -18,9 +18,7 @@ class ListenerManager{
                 let element = event.currentTarget;
                 console.log("currentTarget");
                 let currency = element.getAttribute("data-value");
-                console.log(currency);
                 this.app.changeCurrency(currency);
-
             });
         }
     }

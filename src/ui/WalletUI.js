@@ -9,10 +9,17 @@ class WalletUI{
 
     prepareUI(){
         console.log("walletUi prepareUi")
-        this.getRenderer().renderUI();
-        this.getListenerManager().setListeners()
+        this.renderUi();
+        this.setListeners()
     }
 
+    renderUi(){
+        this.getRenderer().renderUI();
+    }
+
+    setListeners(){
+        this.getListenerManager().setListeners()
+    }
     getListenerManager(){
         return this.listenerManager;
     }

@@ -146,7 +146,7 @@ class EthLib extends AbstractCurrencyLib{
         return new Promise(async (resolve,reject)=>{
             try{
                 console.log('making Transaction');
-                let tx = new Transaction(txParams,{'chain':'sepolia', 'chainId':'11155111'});
+                let tx = new Transaction(txParams,{'chain':'sepolia', 'chainId':'11155111'});// TODO
                 console.log(tx);
                 console.log('signing tx');
                 tx.sign(txParams.privateKey);

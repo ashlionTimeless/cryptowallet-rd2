@@ -41,7 +41,8 @@ class Application{
 
     changeCurrency(currency){
         this.setCurrency(currency);
-        this.getWalletUi().prepareUI();
+        // changed prepareUI to renderUI to avoid duplicating listeners, only re-render
+        this.getWalletUi().renderUi();
     }
 
     setCurrency(currency){
