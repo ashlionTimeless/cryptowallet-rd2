@@ -7,6 +7,7 @@ class ListenerManager{
     setListeners(){
         this.setChangeCurrencyListener();
         this.setSendCurrencyListener();
+        this.setMnemonicListeners();
     }
 
     setChangeCurrencyListener(){
@@ -37,6 +38,28 @@ class ListenerManager{
 
         })
     }
+
+    setMnemonicListeners(){
+        this.setGenerateMnemonicListener();
+        this.setImportMnemonicOnInputListener();
+    }
+
+    setGenerateMnemonicListener(){
+        document.getElementById("generate_mnemonic").addEventListener("click",async()=>{
+            let mnemonic = await this.app.generateMnemonic();
+            alert(mnemonic);
+        })
+    }
+
+    setImportMnemonicOnInputListener(){
+        document.getElementById("import_mnemonic").addEventListener("input",async()=>{
+            let element = event.target || event.srcElement;
+            let mnemonic = element.value;
+            console.log(mnemonic);
+            this.app.importMnemonic(mnemonic);
+        })
+    }
+
 }
 
 module.exports = ListenerManager;

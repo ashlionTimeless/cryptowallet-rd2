@@ -33,6 +33,7 @@ class Application{
     }
 
     prepareUI(){
+
         this.walletUi.prepareUI();
     }
     getCurrency(){
@@ -75,6 +76,15 @@ class Application{
                 return reject(e);
             }
         })
+    }
+
+    generateMnemonic(){
+        return this.blockchainService.generateMnemonic();
+    }
+
+    importMnemonic(mnemonic){
+        this.blockchainService.importMnemonic(mnemonic);
+        this.walletUi.renderUi();
     }
 }
 

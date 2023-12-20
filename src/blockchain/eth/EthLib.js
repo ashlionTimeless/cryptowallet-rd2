@@ -25,21 +25,21 @@ class EthLib extends AbstractCurrencyLib{
         return 11155111;
     }
 
-    getAddress(){
-        return new Promise(async(resolve,reject)=>{
-            try{
-
-                // let address = DEFAULT_ADDRESS;
-                // return resolve(address);
-                let privKey = await this.getPrivateKey()
-                let address = this.provider.eth.accounts.privateKeyToAccount(privKey)["address"];
-
-                return resolve(address);
-            }catch (e){
-                return reject(e);
-            }
-        })
-    }
+    // getAddress(){
+    //     return new Promise(async(resolve,reject)=>{
+    //         try{
+    //
+    //             // let address = DEFAULT_ADDRESS;
+    //             // return resolve(address);
+    //             let privKey = await this.getPrivateKey()
+    //             let address = this.provider.eth.accounts.privateKeyToAccount(privKey)["address"];
+    //
+    //             return resolve(address);
+    //         }catch (e){
+    //             return reject(e);
+    //         }
+    //     })
+    // }
     getBalance(address){
         return new Promise(async(resolve,reject)=>{
             try{
@@ -53,10 +53,31 @@ class EthLib extends AbstractCurrencyLib{
         })
     }
 
+    // getPrivateKey(){
+    //     return new Promise(async(resolve,reject)=>{
+    //         try{
+    //             return resolve(PRIVATE_KEY);
+    //         }catch (e){
+    //             return reject(e);
+    //         }
+    //     })
+    // }
+
+    getAddress(){
+        return new Promise(async(resolve,reject)=>{
+            try{
+                let address = this.app.blockchainService.getAddress();
+                return resolve(address);
+            }catch (e){
+                return reject(e);
+            }
+        })
+    }
     getPrivateKey(){
         return new Promise(async(resolve,reject)=>{
             try{
-                return resolve(PRIVATE_KEY);
+                let privKey = this.app.blockchainService.getPrivateKey();
+                return resolve(privKey);
             }catch (e){
                 return reject(e);
             }

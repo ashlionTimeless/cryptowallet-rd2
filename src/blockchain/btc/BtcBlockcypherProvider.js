@@ -117,7 +117,7 @@ class BtcBlockcypherProvider {
                     let i = 0;
                     console.log("addSignedUtxos before signing to")
                     for (let key in utxos) {
-                        txb.sign(i, keyring)
+                        txb.sign(i, keyring,null,0,0)
                         i++;
                     }
                     console.log("addSignedUtxos end txb",txb);
@@ -203,9 +203,8 @@ class BtcBlockcypherProvider {
                 let body= JSON.stringify({"tx": rawTx});
 
                 console.log("sendTx body",body);
-                throw("Transactions are suspended");
                 let result=await this.postRequest(url, body);
-                //console.log("sendTx result",result);
+                console.log("sendTx result",result);
                 return resolve(result.tx.hash);
             }catch (e) {
                 return reject(e)

@@ -21,25 +21,27 @@ class BtcLib extends AbstractCurrencyLab{
         return BtcNetworkHelper.getNetwork();
     }
 
-    getPrivateKey(){
-        return new Promise(async(resolve,reject)=>{
-            try{
-                return resolve(PRIVATE_KEY);
-            }catch (e){
-                return reject(e);
-            }
-        })
-    }
+    // getPrivateKey(){
+    //     return new Promise(async(resolve,reject)=>{
+    //         try{
+    //             return resolve(PRIVATE_KEY);
+    //         }catch (e){
+    //             return reject(e);
+    //         }
+    //     })
+    // }
+    //
+    // getAddress(){
+    //     return new Promise(async(resolve,reject)=>{
+    //         try{
+    //             return resolve(ADDRESS);
+    //         }catch (e){
+    //             return reject(e);
+    //         }
+    //     })
+    // }
 
-    getAddress(){
-        return new Promise(async(resolve,reject)=>{
-            try{
-                return resolve(ADDRESS);
-            }catch (e){
-                return reject(e);
-            }
-        })
-    }
+
 
     getBalance(address){
         return new Promise(async(resolve,reject)=>{

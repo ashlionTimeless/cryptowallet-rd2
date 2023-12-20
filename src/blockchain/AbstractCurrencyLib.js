@@ -11,26 +11,25 @@ class AbstractCurrencyLib{
         this.converter = converter;
     }
 
-    // getCredentials(){
-    //     return this.app.blockchain.credentials;
-    // }
+    getBlockchainService(){
+        return this.app.blockchainService;
+    }
     getAddress(){
         return new Promise(async(resolve,reject)=>{
             try{
-                // let address = await this.getCredentials().getAddress();
-                throw("getAddress not implemented");
-            }catch(e){
+                let address = this.getBlockchainService().getAddress();
+                return resolve(address);
+            }catch (e){
                 return reject(e);
             }
         })
-    };
-
+    }
     getPrivateKey(){
         return new Promise(async(resolve,reject)=>{
             try{
-                //let privKey = await this.getCredentials().getPrivateKey();
-                throw("getPrivKey not implemented");
-            }catch(e){
+                let privKey = this.getBlockchainService().getPrivateKey();
+                return resolve(privKey);
+            }catch (e){
                 return reject(e);
             }
         })
