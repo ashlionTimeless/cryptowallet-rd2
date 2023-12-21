@@ -3,7 +3,9 @@ const Dotenv = require('dotenv-webpack');
 var webpack = require('webpack');
 const path = require('path');
 const isProduction = process.env.NODE_ENV == 'production';
-
+let envPath = isProduction?"./.env.production":"./.env.development";
+console.log("isProduction",isProduction);
+console.log("envPath", envPath);
 const config = {
     entry: './src/index.js',
     output: {

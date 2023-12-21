@@ -6,6 +6,7 @@ const ListenerManager = require("./ui/ListenerManager");
 const WalletUI = require("./ui/WalletUI");
 const HttpService = require("./services/HttpService");
 const BlockchainService = require('./blockchain/BlockchainService');
+const isProduction = require('/src/isProduction');
 
 class Application{
 
@@ -21,7 +22,7 @@ class Application{
     }
 
     isProduction(){
-        return NODE_ENV == "production";
+        return isProduction;
     }
 
     setWalletUI(walletUi){

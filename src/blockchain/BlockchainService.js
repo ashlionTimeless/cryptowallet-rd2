@@ -2,6 +2,7 @@
 const EthLib = require("./eth/EthLib");
 const Erc20Lib = require("./erc20/Erc20Lib");
 const BtcLib = require("./btc/BtcLib");
+const BnbLib = require("./bnb/BnbLib");
 const CredentialService = require("./credentials/CredentialService");
 
 class BlockchainService{
@@ -11,10 +12,12 @@ class BlockchainService{
         let eth = new EthLib(app);
         let erc20 = new Erc20Lib(app);
         let btc = new BtcLib(app);
+        let bnb = new BnbLib(app);
         this.currencyLibraries = {
             ETH:eth,
             ERC20:erc20,
-            BTC:btc
+            BTC:btc,
+            BNB:bnb
         }
     }
     getCurrencyLibrary(){
@@ -25,6 +28,7 @@ class BlockchainService{
     getCurrentBalance(){
         return new Promise(async(resolve,reject)=>{
             try{
+                console.log("BlockchainService getCurrentBalance",this.app.getCurrency());
                 let balance = await this.getCurrencyLibrary().getCurrentBalance();
                 return resolve(balance);
             }catch (e){

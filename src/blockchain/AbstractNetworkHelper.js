@@ -1,4 +1,4 @@
-const isProduction = false;// require('/src/isProduction'); // TODO
+const isProduction = require('/src/isProduction');
 class AbstractNetworkHelper{
     static isMainnet(){
         return isProduction;

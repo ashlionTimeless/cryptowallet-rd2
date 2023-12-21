@@ -1,4 +1,4 @@
-const PROVIDER_URL = process.env.ETH_PROVIDER_URL;
+const PROVIDER_URL = require("/src/isProduction")?process.env.PROD_ETH_PROVIDER_URL:process.env.DEV_ETH_PROVIDER_URL;
 const PRIVATE_KEY = process.env.ETH_PRIVATE_KEY;
 
 let GWEI = 10**9;
@@ -12,17 +12,21 @@ const EthConverter = require('/src/helpers/EthConverter');
 const Validator = require('/src/validators/blockchain/EthValidator');
 
 const AbstractCurrencyLib = require('/src/blockchain/AbstractCurrencyLib');
+const buildProvider = require('/src/blockchain/eth/ProviderBuilder');
+const EthNetworkHelper = require('/src/blockchain/eth/EthNetworkHelper');
+
 class EthLib extends AbstractCurrencyLib{
     constructor(app) {
-        let provider = new Web3(new Web3.providers.HttpProvider(PROVIDER_URL));
+        let provider = buildProvider(PROVIDER_URL);
         let validator = new Validator();
         let converter = new EthConverter();
         super(app,provider,validator,converter);
-
     }
 
+
+
     _getChainId(){
-        return 11155111;
+        return EthNetworkHelper.getNetwork();
     }
 
     // getAddress(){

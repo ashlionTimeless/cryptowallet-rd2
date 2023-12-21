@@ -1,3 +1,4 @@
+const {crypto,script, ECPair} = require('bitcoinjs-lib');
 const BtcNetworkHelper = require('/src/blockchain/btc/BtcNetworkHelper');
 const PROVIDER_URL=process.env.BLOCKCYPHER_PROVIDER_URL;
 const API_TOKEN=process.env.BLOCKCYPHER_PROVIDER_TOKEN;
@@ -96,6 +97,9 @@ class BtcBlockcypherProvider {
     addSignedUtxos(keyring,txb,from,to,amount,fee){
         return new Promise(async(resolve,reject)=>{
             try{
+
+                let scriptPubkey = crypto.hash160(Buffer.from(keyring.publicKey, 'hex')).toString('hex');
+                console.log(scriptPubkey);
                 console.log("addSignedUtxos",keyring,txb,from,to,amount,fee);
                 this.validator.validateObject(keyring,"keyring");
                 this.validator.validateObject(txb,"txb");

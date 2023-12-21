@@ -22,6 +22,10 @@ class Erc20Lib extends EthLib{
     cacheDecimals(){
         return new Promise(async(resolve,reject)=>{
             try{
+                console.log("cacheDecimals start");
+                console.log("cacheDecimals getContract()",this.getContract());
+                console.log("cacheDecimals provider",this.provider);
+
                 let decimals = await this.getContract().methods.decimals().call();
                 this.setDecimals(decimals);
 
@@ -116,8 +120,11 @@ class Erc20Lib extends EthLib{
     }
     cacheDecimalsIfUndefined(){
         return new Promise(async(resolve,reject)=>{
+            console.log("cacheDecimalsIfUndefined start");
             try{
+                console.log("cacheDecimalsIfUndefined this.isDecimalsUndefined()",this.isDecimalsUndefined());
                 if(this.isDecimalsUndefined()){
+                    console.log("cacheDecimalsIfUndefined this.cacheDecimals() start");
                     await this.cacheDecimals();
                 }
                 return resolve(true);
