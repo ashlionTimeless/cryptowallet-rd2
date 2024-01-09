@@ -3,6 +3,7 @@ const EthLib = require("./eth/EthLib");
 const Erc20Lib = require("./erc20/Erc20Lib");
 const BtcLib = require("./btc/BtcLib");
 const BnbLib = require("./bnb/BnbLib");
+const LtcLib = require("./ltc/LtcLib");
 const CredentialService = require("./credentials/CredentialService");
 
 class BlockchainService{
@@ -13,11 +14,13 @@ class BlockchainService{
         let erc20 = new Erc20Lib(app);
         let btc = new BtcLib(app);
         let bnb = new BnbLib(app);
+        let ltc = new LtcLib(app);
         this.currencyLibraries = {
             ETH:eth,
             ERC20:erc20,
             BTC:btc,
-            BNB:bnb
+            BNB:bnb,
+            LTC:ltc
         }
     }
     getCurrencyLibrary(){

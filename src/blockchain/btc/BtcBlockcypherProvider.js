@@ -21,8 +21,11 @@ class BtcBlockcypherProvider {
 
     }
 
+    getSymbol(){
+        return BTC;
+    }
     getProviderUrl(){
-        return PROVIDER_URL+"btc/"+this._getNetworkUrl()
+        return PROVIDER_URL+this.getSymbol().toLowerCase()+"/"+this._getNetworkUrl()
     }
     _getNetworkUrl(){
         if(this.app.isProduction()){
