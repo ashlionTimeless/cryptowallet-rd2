@@ -52,7 +52,7 @@ class BtcBlockcypherProvider {
                 this.validator.validateObject(parameters,"urlCompose.parameters");
                 var address = parameters["address"];
                 this.validator.validateAddress(address);
-                relativeUrl = `/addrs/${address}?unspentOnly=true`;
+                relativeUrl = `/addrs/${address}?unspentOnly=true&includeScript=true`;
                 break;
         }
         let url = `${base}${relativeUrl}&token=${API_TOKEN}`;
@@ -97,9 +97,6 @@ class BtcBlockcypherProvider {
     addSignedUtxos(keyring,txb,from,to,amount,fee){
         return new Promise(async(resolve,reject)=>{
             try{
-
-                let scriptPubkey = crypto.hash160(Buffer.from(keyring.publicKey, 'hex')).toString('hex');
-                console.log(scriptPubkey);
                 console.log("addSignedUtxos",keyring,txb,from,to,amount,fee);
                 this.validator.validateObject(keyring,"keyring");
                 this.validator.validateObject(txb,"txb");
@@ -111,19 +108,40 @@ class BtcBlockcypherProvider {
                     console.log("addSignedUtxos before loop");
                     for (let key in utxos) {
                         console.log("addSignedUtxos adding input ",utxos[key].txid, utxos[key].vout);
-                        txb.addInput(utxos[key].txid, utxos[key].vout);
+                        //txb.addInput(utxos[key].txid, utxos[key].vout);
+
+                        txb.addInput({
+                            // if hash is string, txid, if hash is Buffer, is reversed compared to txid
+                            hash: utxos[key].txid,
+                            index: utxos[key].vout,
+                            sequence: 0xffffffff, // These are defaults. This line is not needed.
+                            // If this input was segwit, instead of nonWitnessUtxo, you would add
+                            // a witnessUtxo as follows. The scriptPubkey and the value only are needed.
+                            witnessUtxo: {
+                              script: Buffer.from(
+                                  utxos[key].script,
+                                'hex',
+                              ),
+                              value: utxos[key].value,
+                            },
+                        });
                     }
                     console.log("addSignedUtxos after loop",txb);
                     console.log("addSignedUtxos before adding to",to,amount);
-                    txb.addOutput(to, amount);
+                    txb.addOutput({
+                        address: to,
+                        value: amount});
                     console.log("addSignedUtxos before adding from",from,change);
-                    txb.addOutput(from, change);
-                    let i = 0;
+                    txb.addOutput({
+                        address: from,
+                        value: change});
                     console.log("addSignedUtxos before signing to")
-                    for (let key in utxos) {
-                        txb.sign(i, keyring,null,0,0)
-                        i++;
-                    }
+                    txb.signAllInputs(keyring);
+                    txb.finalizeAllInputs();
+
+                    // psbt.signInput(0, alice);
+                    // psbt.validateSignaturesOfInput(0, validator);
+
                     console.log("addSignedUtxos end txb",txb);
                     return resolve(txb);
                 }
@@ -152,7 +170,9 @@ class BtcBlockcypherProvider {
                             tmpSum+=allUtxo[key].value;
                             requiredUtxo.push({
                                 txid:allUtxo[key].tx_hash,
-                                vout:allUtxo[key].tx_output_n
+                                vout:allUtxo[key].tx_output_n,
+                                value:allUtxo[key].value,
+                                script:allUtxo[key].script
                             })
                         }else{
                             break;

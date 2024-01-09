@@ -1,4 +1,4 @@
-const {ECPair,TransactionBuilder,networks} = require('bitcoinjs-lib');
+const {ECPair,Psbt,networks} = require('bitcoinjs-lib');
 
 const PRIVATE_KEY = process.env.BTC_WIF;
 const ADDRESS = process.env.BTC_ADDRESS;
@@ -76,11 +76,11 @@ class BtcLib extends AbstractCurrencyLab{
                 console.log("_createSignRawTx privKey",privKey,this.getNetwork());
                 let keyring = await ECPair.fromWIF(privKey,this.getNetwork());
                 console.log("_createSignRawTx keyring",keyring);
-                let txb = new TransactionBuilder(this.getNetwork());
+                let txb = new Psbt({ network: this.getNetwork() });
                 console.log("_createSignRawTx txb",txb);
                 txb = await this.provider.addSignedUtxos(keyring,txb,txParams["from"],txParams["to"],txParams["amount"],txParams["fee"]);
 
-                let txHash = txb.build().toHex();
+                let txHash = txb.extractTransaction().toHex();
                 this.validator.validateString(txHash,'txHash');
                 return resolve(txHash)
             }catch (e){
